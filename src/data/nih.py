@@ -1,6 +1,12 @@
 import pandas as pd
 from pathlib import Path
 
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+NIH_DIR = PROJECT_ROOT/"data"/"raw"/"nih"
+
+LABELS = ["Atelectasis", "Cardiomegaly", "Consolidation", "Edema", "Effusion",
+             "Emphysema", "Fibrosis", "Hernia", "Infiltration", "Mass", "Nodule",
+             "Pleural_Thickening", "Pneumonia", "Pneumothorax"]
 
 def load_labels(csv_path) -> pd.DataFrame:
 
