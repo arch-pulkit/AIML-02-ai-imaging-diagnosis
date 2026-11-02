@@ -4,6 +4,8 @@ from PIL import Image
 from pydicom.dataset import Dataset, FileMetaDataset
 from pydicom.uid import ExplicitVRLittleEndian, SecondaryCaptureImageStorage, generate_uid
 from pathlib import Path
+from pydicom.multival import MultiValue
+
 
 def apply_window(img, center, width):
 
@@ -18,10 +20,6 @@ def apply_window(img, center, width):
     scaled_img = ((new_img - low) / width) *255
 
     return scaled_img.astype(np.uint8)
-import numpy as np
-import pydicom
-from pydicom.multival import MultiValue
-
 
 def _get(ds, tag, cast=str):
     """Read a DICOM tag as a plain Python value. Returns None if missing or empty."""
