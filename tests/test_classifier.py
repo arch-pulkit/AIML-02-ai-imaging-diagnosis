@@ -1,7 +1,8 @@
 import torch
-from torchvision.models import densenet121, DenseNet121_Weights
-from src.models.classifier import build_model
+from torchvision.models import DenseNet121_Weights, densenet121
+
 from src.data.nih import LABELS
+from src.models.classifier import build_model
 
 
 def test_build_model_shape_and_params():

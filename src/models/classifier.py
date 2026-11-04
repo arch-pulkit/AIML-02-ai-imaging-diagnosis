@@ -1,6 +1,8 @@
 from torch import nn
 from torchvision.models import DenseNet121_Weights, densenet121
+
 from src.data.nih import LABELS
+
 
 def build_model(num_classes: int =len(LABELS), pretrained: bool = True) -> nn.Module:
 
