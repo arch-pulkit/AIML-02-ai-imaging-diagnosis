@@ -1,4 +1,14 @@
 stages:
+  resize:
+    cmd: python -m src.data.resize_images
+    deps:
+      - src/data/resize_images.py
+      - src/data/nih.py
+      - data/raw/nih
+    params:
+      - resize.size
+    outs:
+      - data/processed/images_resized
   make_splits:
     cmd: python -m src.data.make_splits
     deps:
@@ -11,3 +21,4 @@ stages:
       - splits.seed
     outs:
       - data/processed/splits.csv
+    

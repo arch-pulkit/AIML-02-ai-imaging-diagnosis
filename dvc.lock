@@ -13,8 +13,8 @@ stages:
       size: 435131
     - path: src/data/make_splits.py
       hash: md5
-      md5: f9addd4fa034cc065b256a8f6a8c67d6
-      size: 2916
+      md5: 0ea22cc317068c07b431b58c754e1cc9
+      size: 3610
     - path: src/data/nih.py
       hash: md5
       md5: e1ba391f8be3261423ba5e4246ddf1a8
@@ -26,5 +26,30 @@ stages:
     outs:
     - path: data/processed/splits.csv
       hash: md5
-      md5: 78723a4e295da952261f22b19f2606f7
-      size: 11725998
+      md5: 4e5f94fe5af149bc654bb56c020ca54e
+      size: 7409234
+  resize:
+    cmd: python -m src.data.resize_images
+    deps:
+    - path: data/raw/nih
+      hash: md5
+      md5: 6b6fd4e586bddbd246ac6cd9ab38979f.dir
+      size: 45077186807
+      nfiles: 112128
+    - path: src/data/nih.py
+      hash: md5
+      md5: e1ba391f8be3261423ba5e4246ddf1a8
+      size: 1201
+    - path: src/data/resize_images.py
+      hash: md5
+      md5: 7c13ae70dc3ad8f89e968bfcbc1ff907
+      size: 2351
+    params:
+      params.yaml:
+        resize.size: 256
+    outs:
+    - path: data/processed/images_resized
+      hash: md5
+      md5: 1897df3040c4f09e8a34de1d96808645.dir
+      size: 3543465069
+      nfiles: 112120
