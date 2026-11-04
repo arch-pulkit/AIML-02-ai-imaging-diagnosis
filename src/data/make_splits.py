@@ -1,8 +1,8 @@
-from pathlib import Path
 import numpy as np
 import pandas as pd
 import yaml
 from sklearn.model_selection import GroupShuffleSplit
+
 from src.data.nih import LABELS, NIH_DIR, PROJECT_ROOT, load_labels
 
 OUT_PATH = PROJECT_ROOT / "data" / "processed" / "splits.csv"
@@ -50,12 +50,9 @@ def main():
     )
     print(f"Successfully verified test split: {actual_test_count} images.")
 
-    # Processing multihot labels safely
-    print("Building Multi-Hot Labels")
-    label_list = df["finding_labels"].str.split("|")
-
-    for label in LABELS:
-        df[label] = label_list.apply(lambda lst: 1 if label in lst else 0)
+    # Processing multihot labels safelyprint("Building Multi-Hot Labels")
+    dummies = df["finding_labels"].str.get_dummies(sep="|")
+    df[LABELS] = dummies[LABELS]
 
     # Clean Age, Outlier detection
     if "patient_age" in df.columns:
@@ -69,7 +66,7 @@ def main():
     rest = df[rest_mask].copy()
 
     gss = GroupShuffleSplit(n_splits=1, test_size=val_frac, random_state=seed)
-    train_idx, val_idx = next(gss.split(rest, groups=rest["patient_id"]))
+    _, val_idx = next(gss.split(rest, groups=rest["patient_id"]))
 
     val_index_labels = rest.iloc[val_idx].index
     df.loc[val_index_labels, "split"] = "val"

@@ -1,15 +1,14 @@
 from pathlib import Path
-import numpy as np
+
 import pandas as pd
 import torch
-from torch.utils.data import Dataset
-from PIL import Image
 import torchvision.transforms as T
+from PIL import Image
+from torch.utils.data import Dataset
 
-from src.data.nih import LABELS
 from src.data.make_splits import OUT_PATH as SPLITS_CSV
+from src.data.nih import LABELS
 from src.data.resize_images import OUT_DIR as IMAGE_DIR
-
 
 IMAGENET_MEAN = [0.485, 0.456, 0.406]
 IMAGENET_STD = [0.229, 0.224, 0.225]

@@ -1,10 +1,15 @@
+from pathlib import Path
+
 import numpy as np
 import pydicom
 from PIL import Image
 from pydicom.dataset import Dataset, FileMetaDataset
-from pydicom.uid import ExplicitVRLittleEndian, SecondaryCaptureImageStorage, generate_uid
-from pathlib import Path
 from pydicom.multival import MultiValue
+from pydicom.uid import (
+    ExplicitVRLittleEndian,
+    SecondaryCaptureImageStorage,
+    generate_uid,
+)
 
 
 def apply_window(img, center, width):

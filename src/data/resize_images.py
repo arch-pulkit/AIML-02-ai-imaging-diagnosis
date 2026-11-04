@@ -1,10 +1,10 @@
 from concurrent.futures import ProcessPoolExecutor
-from pathlib import Path
+
+import yaml
 from PIL import Image
 from tqdm import tqdm
-import yaml
-from src.data.nih import PROJECT_ROOT, NIH_DIR, find_images
 
+from src.data.nih import NIH_DIR, PROJECT_ROOT, find_images
 
 OUT_DIR = PROJECT_ROOT / "data" / "processed" / "images_resized"
 

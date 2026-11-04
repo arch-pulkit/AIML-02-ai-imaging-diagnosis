@@ -13,12 +13,12 @@ stages:
       size: 435131
     - path: src/data/make_splits.py
       hash: md5
-      md5: 0ea22cc317068c07b431b58c754e1cc9
-      size: 3610
+      md5: 4424d26400ad00cac6193b062a5f43f6
+      size: 3512
     - path: src/data/nih.py
       hash: md5
-      md5: e1ba391f8be3261423ba5e4246ddf1a8
-      size: 1201
+      md5: 17dbd39008ae274f4e4371136e4b2c36
+      size: 1202
     params:
       params.yaml:
         splits.seed: 42
@@ -38,12 +38,12 @@ stages:
       nfiles: 112128
     - path: src/data/nih.py
       hash: md5
-      md5: e1ba391f8be3261423ba5e4246ddf1a8
-      size: 1201
+      md5: 17dbd39008ae274f4e4371136e4b2c36
+      size: 1202
     - path: src/data/resize_images.py
       hash: md5
-      md5: 7c13ae70dc3ad8f89e968bfcbc1ff907
-      size: 2351
+      md5: 7df339ec95d3b5f1d7635428ef09e8e3
+      size: 2327
     params:
       params.yaml:
         resize.size: 256
