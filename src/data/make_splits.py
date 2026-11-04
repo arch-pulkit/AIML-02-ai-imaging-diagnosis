@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import GroupShuffleSplit
 from src.data.nih import LABELS, NIH_DIR, PROJECT_ROOT, load_labels
+import yaml
 
 
 OUT_PATH = PROJECT_ROOT/ "data" / "processed" / "splits.csv"
@@ -12,6 +13,14 @@ KEEP_COLS = ["image_index", "patient_id", "split",
 
 
 def main():
+
+    params_path = PROJECT_ROOT / "params.yaml"
+    print(f"Loading parameters from {params_path}")
+    params = yaml.safe_load(params_path.read_text())["splits"]
+    val_frac = params["val_frac"]
+    seed = params["seed"]
+    print(f"Config loaded: val_frac = {val_frac}, seed = {seed}")
+
 
     #load metadata and official test list
     data_dir = NIH_DIR

@@ -1,0 +1,30 @@
+schema: '2.0'
+stages:
+  make_splits:
+    cmd: python -m src.data.make_splits
+    deps:
+    - path: data/raw/nih/Data_Entry_2017.csv
+      hash: md5
+      md5: 2528009b0d96b19d4de60debedd8ded6
+      size: 7861152
+    - path: data/raw/nih/test_list.txt
+      hash: md5
+      md5: adeeabf20ea2a8eb66ced87b78434400
+      size: 435131
+    - path: src/data/make_splits.py
+      hash: md5
+      md5: f9addd4fa034cc065b256a8f6a8c67d6
+      size: 2916
+    - path: src/data/nih.py
+      hash: md5
+      md5: e1ba391f8be3261423ba5e4246ddf1a8
+      size: 1201
+    params:
+      params.yaml:
+        splits.seed: 42
+        splits.val_frac: 0.2
+    outs:
+    - path: data/processed/splits.csv
+      hash: md5
+      md5: 78723a4e295da952261f22b19f2606f7
+      size: 11725998

@@ -1,0 +1,13 @@
+stages:
+  make_splits:
+    cmd: python -m src.data.make_splits
+    deps:
+      - src/data/make_splits.py
+      - src/data/nih.py
+      - data/raw/nih/Data_Entry_2017.csv
+      - data/raw/nih/test_list.txt
+    params:
+      - splits.val_frac
+      - splits.seed
+    outs:
+      - data/processed/splits.csv
