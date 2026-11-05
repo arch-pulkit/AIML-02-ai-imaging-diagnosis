@@ -21,4 +21,28 @@ stages:
       - splits.seed
     outs:
       - data/processed/splits.csv
-    
+
+  train:
+    cmd: python -m src.train.train
+    deps:
+      - src/train/train.py
+      - src/train/weights.py
+      - src/models/classifier.py
+      - src/data/dataset.py
+      - src/data/nih.py
+      - src/data/make_splits.py      
+      - src/data/resize_images.py    
+      - data/processed/splits.csv
+      - data/processed/images_resized
+    params:
+      - train                        
+    outs:
+      - models/densenet121_best.pt
+    metrics:
+      - reports/train_metrics.json:
+          cache: false
+    plots:
+      - reports/train_history.csv:
+          cache: false
+          x: epoch
+          y: val_mean_auroc
