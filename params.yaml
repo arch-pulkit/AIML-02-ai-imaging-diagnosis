@@ -4,3 +4,12 @@ splits:
   
 resize:
   size: 256
+
+train:
+  epochs: 10
+  batch_size: 32
+  lr: 1.0e-4
+  weight_decay: 1.0e-5
+  lr_factor: 0.1
+  lr_patience: 1
+  seed: 42
