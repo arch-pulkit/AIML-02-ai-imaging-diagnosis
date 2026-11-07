@@ -46,3 +46,18 @@ stages:
           cache: false
           x: epoch
           y: val_mean_auroc
+  predict:
+    cmd: python -m src.evaluation.predict
+    deps:
+      - src/evaluation/predict.py
+      - src/train/train.py           
+      - src/models/classifier.py
+      - src/data/dataset.py
+      - src/data/nih.py
+      - src/data/make_splits.py       
+      - src/data/resize_images.py   
+      - models/densenet121_best.pt    
+      - data/processed/splits.csv
+      - data/processed/images_resized
+    outs:
+      - data/processed/predictions
