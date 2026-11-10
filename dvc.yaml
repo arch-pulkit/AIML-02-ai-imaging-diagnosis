@@ -86,3 +86,16 @@ stages:
     outs:
       - reports/thresholds.json:
           cache: false
+  subgroups:
+    cmd: python -m src.evaluation.subgroups
+    deps:
+      - src/evaluation/subgroups.py
+      - src/evaluation/metrics.py      # load_predictions, per_class_auroc
+      - src/evaluation/predict.py      # IMAGE_COL, PRED_DIR
+      - src/data/nih.py                # LABELS, PROJECT_ROOT
+      - src/data/make_splits.py        # OUT_PATH (splits CSV path)
+      - data/processed/predictions
+      - data/processed/splits.csv
+    outs:
+      - reports/subgroup_metrics.json:
+          cache: false

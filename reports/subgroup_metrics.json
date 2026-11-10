@@ -1,0 +1,273 @@
+{
+  "split": "test",
+  "min_pos": 30,
+  "overall": {
+    "Atelectasis": 0.7590360461214805,
+    "Cardiomegaly": 0.8901632736081346,
+    "Consolidation": 0.749703764945115,
+    "Edema": 0.8424394764834958,
+    "Effusion": 0.8199953472397867,
+    "Emphysema": 0.9016933863878125,
+    "Fibrosis": 0.8158063450687915,
+    "Hernia": 0.9353067196630596,
+    "Infiltration": 0.6942282392600829,
+    "Mass": 0.8120418159403145,
+    "Nodule": 0.7364400554443836,
+    "Pleural_Thickening": 0.7638250556471307,
+    "Pneumonia": 0.6989291435918966,
+    "Pneumothorax": 0.8440351235614012
+  },
+  "subgroups": {
+    "sex": {
+      "F": {
+        "n_images": 10714,
+        "auroc": {
+          "Atelectasis": 0.7460647214805828,
+          "Cardiomegaly": 0.8900265664697238,
+          "Consolidation": 0.7567984649154655,
+          "Edema": 0.8430149283114536,
+          "Effusion": 0.8061166266550702,
+          "Emphysema": 0.9057612475688193,
+          "Fibrosis": 0.7804636855361493,
+          "Hernia": 0.9637079388883681,
+          "Infiltration": 0.6986452214829445,
+          "Mass": 0.8110156005182243,
+          "Nodule": 0.7529355937169441,
+          "Pleural_Thickening": 0.7720457341463605,
+          "Pneumonia": 0.6879255422598043,
+          "Pneumothorax": 0.8496371676435311
+        },
+        "n_pos": {
+          "Atelectasis": 1363,
+          "Cardiomegaly": 528,
+          "Consolidation": 776,
+          "Edema": 404,
+          "Effusion": 1921,
+          "Emphysema": 381,
+          "Fibrosis": 184,
+          "Hernia": 45,
+          "Infiltration": 2475,
+          "Mass": 682,
+          "Nodule": 692,
+          "Pleural_Thickening": 463,
+          "Pneumonia": 221,
+          "Pneumothorax": 1231
+        }
+      },
+      "M": {
+        "n_images": 14882,
+        "auroc": {
+          "Atelectasis": 0.7681525626522168,
+          "Cardiomegaly": 0.8893992264722952,
+          "Consolidation": 0.7441867159122616,
+          "Edema": 0.8417318657737065,
+          "Effusion": 0.8294270771834609,
+          "Emphysema": 0.8990911920261987,
+          "Fibrosis": 0.8429294237172015,
+          "Hernia": 0.9042435178748391,
+          "Infiltration": 0.6909113915291591,
+          "Mass": 0.8121388476367504,
+          "Nodule": 0.7245600895138509,
+          "Pleural_Thickening": 0.7577796623507873,
+          "Pneumonia": 0.7059517204249735,
+          "Pneumothorax": 0.8408450661134329
+        },
+        "n_pos": {
+          "Atelectasis": 1916,
+          "Cardiomegaly": 541,
+          "Consolidation": 1039,
+          "Edema": 521,
+          "Effusion": 2737,
+          "Emphysema": 712,
+          "Fibrosis": 251,
+          "Hernia": 41,
+          "Infiltration": 3637,
+          "Mass": 1066,
+          "Nodule": 931,
+          "Pleural_Thickening": 680,
+          "Pneumonia": 334,
+          "Pneumothorax": 1434
+        }
+      }
+    },
+    "age": {
+      "<40": {
+        "n_images": 8290,
+        "auroc": {
+          "Atelectasis": 0.7800572866496647,
+          "Cardiomegaly": 0.8826473319301721,
+          "Consolidation": 0.7508609349307024,
+          "Edema": 0.8488084761186345,
+          "Effusion": 0.8196260519459736,
+          "Emphysema": 0.9119725749975303,
+          "Fibrosis": 0.8467111902305172,
+          "Hernia": null,
+          "Infiltration": 0.6920659095484221,
+          "Mass": 0.8129788493307493,
+          "Nodule": 0.7319778981098672,
+          "Pleural_Thickening": 0.7889164771155471,
+          "Pneumonia": 0.7078725404431446,
+          "Pneumothorax": 0.8370442331302125
+        },
+        "n_pos": {
+          "Atelectasis": 785,
+          "Cardiomegaly": 410,
+          "Consolidation": 550,
+          "Edema": 336,
+          "Effusion": 1302,
+          "Emphysema": 368,
+          "Fibrosis": 86,
+          "Hernia": 1,
+          "Infiltration": 2093,
+          "Mass": 472,
+          "Nodule": 399,
+          "Pleural_Thickening": 333,
+          "Pneumonia": 228,
+          "Pneumothorax": 911
+        }
+      },
+      "40-59": {
+        "n_images": 11224,
+        "auroc": {
+          "Atelectasis": 0.7476712295833827,
+          "Cardiomegaly": 0.9062208544351401,
+          "Consolidation": 0.7397469202991888,
+          "Edema": 0.8320271514806022,
+          "Effusion": 0.8189212364593546,
+          "Emphysema": 0.9077438706016774,
+          "Fibrosis": 0.8166935439828888,
+          "Hernia": null,
+          "Infiltration": 0.6909946539521241,
+          "Mass": 0.8210169299104545,
+          "Nodule": 0.7324066494457073,
+          "Pleural_Thickening": 0.7619136458355297,
+          "Pneumonia": 0.6834435332981517,
+          "Pneumothorax": 0.8488100964322044
+        },
+        "n_pos": {
+          "Atelectasis": 1568,
+          "Cardiomegaly": 444,
+          "Consolidation": 827,
+          "Edema": 429,
+          "Effusion": 2111,
+          "Emphysema": 417,
+          "Fibrosis": 201,
+          "Hernia": 29,
+          "Infiltration": 2634,
+          "Mass": 849,
+          "Nodule": 818,
+          "Pleural_Thickening": 509,
+          "Pneumonia": 212,
+          "Pneumothorax": 1110
+        }
+      },
+      "60+": {
+        "n_images": 6078,
+        "auroc": {
+          "Atelectasis": 0.7401675878352092,
+          "Cardiomegaly": 0.868966994434947,
+          "Consolidation": 0.7665201269471161,
+          "Edema": 0.8401937689202558,
+          "Effusion": 0.8185567929204576,
+          "Emphysema": 0.8815317697900019,
+          "Fibrosis": 0.7653263297023837,
+          "Hernia": 0.9373902832471414,
+          "Infiltration": 0.7019305963794299,
+          "Mass": 0.7897545096006565,
+          "Nodule": 0.7403722894244998,
+          "Pleural_Thickening": 0.7335283258336218,
+          "Pneumonia": 0.7061903585254216,
+          "Pneumothorax": 0.8485025202413365
+        },
+        "n_pos": {
+          "Atelectasis": 926,
+          "Cardiomegaly": 215,
+          "Consolidation": 438,
+          "Edema": 159,
+          "Effusion": 1244,
+          "Emphysema": 308,
+          "Fibrosis": 148,
+          "Hernia": 56,
+          "Infiltration": 1385,
+          "Mass": 426,
+          "Nodule": 406,
+          "Pleural_Thickening": 300,
+          "Pneumonia": 114,
+          "Pneumothorax": 643
+        }
+      }
+    },
+    "view": {
+      "AP": {
+        "n_images": 14500,
+        "auroc": {
+          "Atelectasis": 0.7515873761762049,
+          "Cardiomegaly": 0.846935135142426,
+          "Consolidation": 0.6994674449028881,
+          "Edema": 0.7691678489904655,
+          "Effusion": 0.7880654522411656,
+          "Emphysema": 0.9121916998021615,
+          "Fibrosis": 0.7925382357837224,
+          "Hernia": null,
+          "Infiltration": 0.6667884136621711,
+          "Mass": 0.7822558962687817,
+          "Nodule": 0.727169793939394,
+          "Pleural_Thickening": 0.7636280782485679,
+          "Pneumonia": 0.6774439845520902,
+          "Pneumothorax": 0.8225522538754684
+        },
+        "n_pos": {
+          "Atelectasis": 1918,
+          "Cardiomegaly": 642,
+          "Consolidation": 1425,
+          "Edema": 847,
+          "Effusion": 2902,
+          "Emphysema": 468,
+          "Fibrosis": 122,
+          "Hernia": 15,
+          "Infiltration": 4440,
+          "Mass": 807,
+          "Nodule": 750,
+          "Pleural_Thickening": 457,
+          "Pneumonia": 393,
+          "Pneumothorax": 1114
+        }
+      },
+      "PA": {
+        "n_images": 11096,
+        "auroc": {
+          "Atelectasis": 0.7696077199346231,
+          "Cardiomegaly": 0.9359840708147199,
+          "Consolidation": 0.7387743273601671,
+          "Edema": 0.8275438559746057,
+          "Effusion": 0.8574392233663231,
+          "Emphysema": 0.8827715404450386,
+          "Fibrosis": 0.7801861823086215,
+          "Hernia": 0.9242323783973682,
+          "Infiltration": 0.6149041869074987,
+          "Mass": 0.8337599304300871,
+          "Nodule": 0.7373810307351112,
+          "Pleural_Thickening": 0.7339339276262173,
+          "Pneumonia": 0.6901775411165083,
+          "Pneumothorax": 0.845938121335734
+        },
+        "n_pos": {
+          "Atelectasis": 1361,
+          "Cardiomegaly": 427,
+          "Consolidation": 390,
+          "Edema": 78,
+          "Effusion": 1756,
+          "Emphysema": 625,
+          "Fibrosis": 313,
+          "Hernia": 71,
+          "Infiltration": 1672,
+          "Mass": 941,
+          "Nodule": 873,
+          "Pleural_Thickening": 686,
+          "Pneumonia": 162,
+          "Pneumothorax": 1551
+        }
+      }
+    }
+  }
+}
