@@ -1,0 +1,74 @@
+{
+  "val": {
+    "mean_auroc": 0.8284582944327072,
+    "auroc": {
+      "Atelectasis": 0.8104720299763335,
+      "Cardiomegaly": 0.9168464274580307,
+      "Consolidation": 0.8079733797142585,
+      "Edema": 0.9108083035173802,
+      "Effusion": 0.8965075562322911,
+      "Emphysema": 0.8784109826935744,
+      "Fibrosis": 0.7830165298338039,
+      "Hernia": 0.8939514296441202,
+      "Infiltration": 0.69543597065363,
+      "Mass": 0.8483097168973142,
+      "Nodule": 0.7553765270471172,
+      "Pleural_Thickening": 0.8043850432096852,
+      "Pneumonia": 0.748265949692114,
+      "Pneumothorax": 0.8486562754882506
+    },
+    "n_pos": {
+      "Atelectasis": 1705,
+      "Cardiomegaly": 356,
+      "Consolidation": 509,
+      "Edema": 244,
+      "Effusion": 1695,
+      "Emphysema": 200,
+      "Fibrosis": 257,
+      "Hernia": 30,
+      "Infiltration": 2581,
+      "Mass": 797,
+      "Nodule": 939,
+      "Pleural_Thickening": 463,
+      "Pneumonia": 186,
+      "Pneumothorax": 474
+    },
+    "n_images": 16899
+  },
+  "test": {
+    "mean_auroc": 0.8045459852116347,
+    "auroc": {
+      "Atelectasis": 0.7590360461214805,
+      "Cardiomegaly": 0.8901632736081346,
+      "Consolidation": 0.749703764945115,
+      "Edema": 0.8424394764834958,
+      "Effusion": 0.8199953472397867,
+      "Emphysema": 0.9016933863878125,
+      "Fibrosis": 0.8158063450687915,
+      "Hernia": 0.9353067196630596,
+      "Infiltration": 0.6942282392600829,
+      "Mass": 0.8120418159403145,
+      "Nodule": 0.7364400554443836,
+      "Pleural_Thickening": 0.7638250556471307,
+      "Pneumonia": 0.6989291435918966,
+      "Pneumothorax": 0.8440351235614012
+    },
+    "n_pos": {
+      "Atelectasis": 3279,
+      "Cardiomegaly": 1069,
+      "Consolidation": 1815,
+      "Edema": 925,
+      "Effusion": 4658,
+      "Emphysema": 1093,
+      "Fibrosis": 435,
+      "Hernia": 86,
+      "Infiltration": 6112,
+      "Mass": 1748,
+      "Nodule": 1623,
+      "Pleural_Thickening": 1143,
+      "Pneumonia": 555,
+      "Pneumothorax": 2665
+    },
+    "n_images": 25596
+  }
+}

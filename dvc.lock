@@ -166,3 +166,36 @@ stages:
       md5: fe9202cab54975f16e66b969df85ddc7.dir
       size: 7119658
       nfiles: 2
+  eval_metrics:
+    cmd: python -m src.evaluation.metrics
+    deps:
+    - path: data/processed/predictions
+      hash: md5
+      md5: fe9202cab54975f16e66b969df85ddc7.dir
+      size: 7119658
+      nfiles: 2
+    - path: data/processed/splits.csv
+      hash: md5
+      md5: 4e5f94fe5af149bc654bb56c020ca54e
+      size: 7409234
+    - path: src/data/make_splits.py
+      hash: md5
+      md5: 4424d26400ad00cac6193b062a5f43f6
+      size: 3512
+    - path: src/data/nih.py
+      hash: md5
+      md5: 17dbd39008ae274f4e4371136e4b2c36
+      size: 1202
+    - path: src/evaluation/metrics.py
+      hash: md5
+      md5: 542c11eae3da3cf9126b35208733db6f
+      size: 2791
+    - path: src/evaluation/predict.py
+      hash: md5
+      md5: 2b7e867a59ea2cfe5edd0a96e89484d4
+      size: 2704
+    outs:
+    - path: reports/eval_metrics.json
+      hash: md5
+      md5: 7708fc52dcf6f54e4601c6a458f0fb90
+      size: 2038

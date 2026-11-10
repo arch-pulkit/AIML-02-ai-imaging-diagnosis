@@ -61,3 +61,15 @@ stages:
       - data/processed/images_resized
     outs:
       - data/processed/predictions
+  eval_metrics:
+    cmd: python -m src.evaluation.metrics
+    deps:
+      - src/evaluation/metrics.py
+      - src/evaluation/predict.py      # IMAGE_COL, PRED_DIR
+      - src/data/nih.py                # LABELS, PROJECT_ROOT
+      - src/data/make_splits.py        # OUT_PATH (splits CSV path)
+      - data/processed/predictions     # links this stage to predict's output
+      - data/processed/splits.csv      # labels + metadata
+    metrics:
+      - reports/eval_metrics.json:
+          cache: false
