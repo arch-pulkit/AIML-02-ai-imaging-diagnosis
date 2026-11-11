@@ -273,3 +273,76 @@ stages:
       hash: md5
       md5: 2776dc4d5e893bd0b13d9694cf96d10f
       size: 8437
+  localization:
+    cmd: python -m src.explain.localization
+    deps:
+    - path: data/processed/images_resized
+      hash: md5
+      md5: 1897df3040c4f09e8a34de1d96808645.dir
+      size: 3543465069
+      nfiles: 112120
+    - path: data/processed/splits.csv
+      hash: md5
+      md5: 4e5f94fe5af149bc654bb56c020ca54e
+      size: 7409234
+    - path: data/raw/nih/BBox_List_2017.csv
+      hash: md5
+      md5: c288912caf65ab8b6c7aff6717d11005
+      size: 92416
+    - path: models/densenet121_best.pt
+      hash: md5
+      md5: f645f729beb78a657e406e42673c486f
+      size: 28474646
+    - path: reports/thresholds.json
+      hash: md5
+      md5: e2f3552f3c0bf4d5eec56d0dd7e1ec34
+      size: 7723
+    - path: src/data/dataset.py
+      hash: md5
+      md5: 8190673d483c5817408087085da4f614
+      size: 2711
+    - path: src/data/make_splits.py
+      hash: md5
+      md5: 4424d26400ad00cac6193b062a5f43f6
+      size: 3512
+    - path: src/data/nih.py
+      hash: md5
+      md5: 17dbd39008ae274f4e4371136e4b2c36
+      size: 1202
+    - path: src/data/resize_images.py
+      hash: md5
+      md5: 7df339ec95d3b5f1d7635428ef09e8e3
+      size: 2327
+    - path: src/evaluation/predict.py
+      hash: md5
+      md5: 2b7e867a59ea2cfe5edd0a96e89484d4
+      size: 2704
+    - path: src/evaluation/thresholds.py
+      hash: md5
+      md5: 42ca82a5afba1693936681c6f4ef0185
+      size: 2695
+    - path: src/explain/gradcam.py
+      hash: md5
+      md5: 05420eb61275daf2a51ed5c7d0ab95bf
+      size: 8084
+    - path: src/explain/localization.py
+      hash: md5
+      md5: 106eac39ae214ec1b2f6f574bfeec887
+      size: 6073
+    - path: src/models/classifier.py
+      hash: md5
+      md5: a391c33e78f0dcef435bcfce9164c251
+      size: 445
+    - path: src/train/train.py
+      hash: md5
+      md5: edc3ee9026b11458a782e5303f315ed1
+      size: 7448
+    outs:
+    - path: reports/gradcam_localization.json
+      hash: md5
+      md5: 72614420a49acf17abfcf66b67d6c17d
+      size: 2498
+    - path: reports/gradcam_localization_boxes.csv
+      hash: md5
+      md5: b8ababce791afa5fbf28deed57f87f1c
+      size: 147638

@@ -99,3 +99,26 @@ stages:
     outs:
       - reports/subgroup_metrics.json:
           cache: false
+  localization:
+    cmd: python -m src.explain.localization
+    deps:
+      - src/explain/localization.py
+      - src/explain/gradcam.py         # gradcam, load_model, load_bboxes, ORIG_SIZE
+      - src/evaluation/thresholds.py   # THRESHOLDS path
+      - src/evaluation/predict.py      # IMAGE_COL
+      - src/train/train.py             # CHECKPOINT (via load_model), get_device
+      - src/models/classifier.py
+      - src/data/dataset.py
+      - src/data/nih.py                # LABELS, NIH_DIR, PROJECT_ROOT
+      - src/data/make_splits.py        # OUT_PATH (dataset's default splits CSV)
+      - src/data/resize_images.py      # IMAGE_DIR
+      - models/densenet121_best.pt     # links this stage to train's output
+      - reports/thresholds.json        # links this stage to the thresholds stage
+      - data/raw/nih/BBox_List_2017.csv
+      - data/processed/splits.csv
+      - data/processed/images_resized
+    outs:
+      - reports/gradcam_localization.json:
+          cache: false
+      - reports/gradcam_localization_boxes.csv:
+          cache: false
