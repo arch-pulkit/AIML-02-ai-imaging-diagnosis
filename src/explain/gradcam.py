@@ -81,25 +81,29 @@ def capture(
 
     return store["act"], store["grad"], float(target.item())
 
+def cam_from_maps(act: torch.Tensor, grad: torch.Tensor, size: tuple[int, int]) -> np.ndarray:
+    """
+    Grad-CAM math on captured maps: weight = mean gradient per map, ReLU(weighted sum),
+    bilinear upsample to `size`, min-max to [0, 1]. A flat map is returned as zeros.
+    """
+    weights = grad.mean(dim=(2, 3), keepdim=True)  # (1, K, 1, 1): one weight per map
+    cam = F.relu((weights * act).sum(dim=1, keepdim=True))  # (1, 1, h, w)
+    cam = F.interpolate(cam, size=size, mode="bilinear", align_corners=False)
+    cam = cam[0, 0].cpu().numpy()
+    lo, hi = cam.min(), cam.max()
+    if hi == lo:
+        return np.zeros_like(cam, dtype=np.float32)
+    return ((cam - lo) / (hi - lo)).astype(np.float32)
+
 
 def gradcam(
     model: torch.nn.Module, x: torch.Tensor, label_idx: int
 ) -> tuple[np.ndarray, float]:
     """
-    GradCAM heatmap for one image and one label.
+    Grad-CAM heatmap for one image and one label.
     """
-
     act, grad, logit = capture(model, x, label_idx)
-    weights = grad.mean(dim=(2, 3), keepdim=True)  # (1, K, 1, 1): one weight per map
-    cam = F.relu((weights * act).sum(dim=1, keepdim=True))  # (1, 1, h, w)
-    cam = F.interpolate(cam, size=x.shape[-2:], mode="bilinear", align_corners=False)
-    cam = cam[0, 0].cpu().numpy()
-    lo, hi = cam.min(), cam.max()
-
-    if hi == lo:
-        return np.zeros_like(cam, dtype=np.float32), logit
-
-    return ((cam - lo) / (hi - lo)).astype(np.float32), logit
+    return cam_from_maps(act, grad, x.shape[-2:]), logit
 
 
 def load_bboxes() -> pd.DataFrame:
