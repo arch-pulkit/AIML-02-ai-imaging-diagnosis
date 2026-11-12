@@ -9,7 +9,7 @@ import torch
 
 from src.data.nih import PROJECT_ROOT
 
-SPLEEN_DIR = PROJECT_ROOT / "data" / "interim" / "spleen"
+SPLEEN_DIR = PROJECT_ROOT / "models" / "spleen"
 HISTORY = SPLEEN_DIR / "spleen_history.csv"
 BEST_CKPT = SPLEEN_DIR / "spleen_unet_best.pt"
 LAST_CKPT = SPLEEN_DIR / "spleen_unet_last.pt"

@@ -1,0 +1,6 @@
+outs:
+- md5: 49028fa7e58cebe96f7d033e414bc25b.dir
+  size: 38647775
+  nfiles: 3
+  hash: md5
+  path: spleen
