@@ -1,15 +1,14 @@
-notebooks/.ipynb_checkpoints/
+# Python
+__pycache__/
+*.egg-info/
+.venv/
 
+# Jupyter
 .ipynb_checkpoints/
 
-medimg.egg-info/
-
-src/data/__pycache__
-src/__pycache__
-tests/__pycache__
+# macOS
 .DS_Store
 
-NOTES.me
-
-
+# scratch (ignored on purpose)
 data/interim/
+NOTES.md
