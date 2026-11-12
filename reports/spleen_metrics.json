@@ -1,0 +1,81 @@
+{
+  "dataset": "MSD Task09_Spleen",
+  "split": {
+    "train": 33,
+    "val": 8,
+    "seed": 42,
+    "test": "none (MSD test labels not public)"
+  },
+  "dice_space": "resampled 1.5x1.5x2.0 mm, spleen only, hard (argmax)",
+  "settings": {
+    "pixdim": [
+      1.5,
+      1.5,
+      2.0
+    ],
+    "hu_window": [
+      -57,
+      164
+    ],
+    "train_crop": [
+      96,
+      96,
+      96
+    ],
+    "sw_roi": [
+      160,
+      160,
+      160
+    ],
+    "max_epochs": 600,
+    "val_interval": 5
+  },
+  "env": {
+    "monai": "1.6.1",
+    "torch": "2.11.0+cu130",
+    "nibabel": "5.4.2",
+    "gpu": "Tesla T4"
+  },
+  "best": {
+    "epoch": 425,
+    "mean_dice": 0.9419641941785812,
+    "sd": 0.01009670494819187,
+    "min": 0.926472008228302,
+    "per_vol": {
+      "spleen_20.nii.gz": 0.9540074467658997,
+      "spleen_62.nii.gz": 0.942367672920227,
+      "spleen_9.nii.gz": 0.954446017742157,
+      "spleen_32.nii.gz": 0.9484937191009521,
+      "spleen_3.nii.gz": 0.926472008228302,
+      "spleen_49.nii.gz": 0.9377447962760925,
+      "spleen_53.nii.gz": 0.9407368898391724,
+      "spleen_26.nii.gz": 0.9314450025558472
+    }
+  },
+  "last": {
+    "epoch": 600,
+    "mean_dice": 0.8231569044291973,
+    "sd": 0.24989561260030183,
+    "min": 0.26059606671333313,
+    "per_vol": {
+      "spleen_20.nii.gz": 0.9591915011405945,
+      "spleen_62.nii.gz": 0.933466911315918,
+      "spleen_9.nii.gz": 0.9561721682548523,
+      "spleen_32.nii.gz": 0.9510323405265808,
+      "spleen_3.nii.gz": 0.9391618371009827,
+      "spleen_49.nii.gz": 0.6502637267112732,
+      "spleen_53.nii.gz": 0.935370683670044,
+      "spleen_26.nii.gz": 0.26059606671333313
+    }
+  },
+  "plateau": {
+    "from_epoch": 400,
+    "n": 40,
+    "mean": 0.8829381524352357,
+    "median": 0.8946026042103767,
+    "q25": 0.8748334851115942,
+    "q75": 0.9057089388370514,
+    "min": 0.6626578690484166,
+    "max": 0.9419641941785812
+  }
+}
