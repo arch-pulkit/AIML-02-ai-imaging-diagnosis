@@ -8,10 +8,6 @@ For education only, not clinical use.
 """
 
 import argparse
-import base64
-import json
-import os
-import urllib.request
 from collections import Counter
 from pathlib import Path
 
@@ -21,6 +17,7 @@ import pandas as pd
 from src.data.dicom_io import png_to_dicom
 from src.data.make_splits import OUT_PATH
 from src.data.nih import LABELS, NIH_DIR, PROJECT_ROOT, find_images, load_labels
+from src.serve.orthanc import ORTHANC_URL, upload_dicom
 
 BBOX_CSV = NIH_DIR / "BBox_List_2017.csv"
 SUBSET_CSV = PROJECT_ROOT / "data" / "demo" / "demo_subset.csv"
@@ -31,10 +28,6 @@ N_BOX_PER_LABEL = 2  # 8 box labels -> 16 images
 N_BOX_EXTRA = 4  # -> 20 box images
 N_NORMAL = 10
 N_RANDOM = 10
-
-ORTHANC_URL = os.environ.get("ORTHANC_URL", "http://localhost:8042")
-ORTHANC_USER = os.environ.get("ORTHANC_USER", "demo")
-ORTHANC_PASSWORD = os.environ.get("ORTHANC_PASSWORD", "demo")
 
 
 def _pick(rng, candidates, n, exclude) -> list[str]:
@@ -100,24 +93,8 @@ def convert(subset: pd.DataFrame) -> list[Path]:
 
 
 def upload(paths: list[Path]) -> Counter:
-    """
-    POST each file to Orthanc; raises on any HTTP error.
-    """
-    token = base64.b64encode(f"{ORTHANC_USER}:{ORTHANC_PASSWORD}".encode()).decode()
-    headers = {"Authorization": f"Basic {token}", "Content-Type": "application/dicom"}
-    statuses: Counter = Counter()
-
-    for path in paths:
-        req = urllib.request.Request(
-            f"{ORTHANC_URL}/instances",
-            data=path.read_bytes(),
-            headers=headers,
-            method="POST",
-        )
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            statuses[json.load(resp)["Status"]] += 1
-
-    return statuses
+    """POST each file to Orthanc; raises on any HTTP error."""
+    return Counter(upload_dicom(path.read_bytes())["Status"] for path in paths)
 
 
 def main() -> None:
