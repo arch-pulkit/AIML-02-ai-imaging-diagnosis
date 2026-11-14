@@ -1,0 +1,19 @@
+# Local demo stack — for education only, not clinical use.
+name: ai_diag
+
+services:
+  orthanc:
+    image: orthancteam/orthanc:latest    
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8042:8042"   #REST API + web UI
+      - "127.0.0.1:4242:4242"   #DICOM Protocol
+    volumes:
+      - orthanc-db:/var/lib/orthanc/db
+    environment:
+      ORTHANC__NAME: "ai_diag"
+      ORTHANC__REGISTERED_USERS: |
+        {"demo": "demo"}
+
+volumes:
+  orthanc-db:
