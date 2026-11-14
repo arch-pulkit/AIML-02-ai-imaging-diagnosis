@@ -89,7 +89,8 @@ def png_to_dicom(png_path, row, out_path) -> None:
 
     #Separaing UIDs
     image_index = str(row["image_index"])
-    study_uid = generate_uid(entropy_srcs=[str(row["patient_id"]), str(row["follow_up"])])
+    study_key = f"study|{row['patient_id']}|{row['follow_up']}"
+    study_uid = generate_uid(entropy_srcs=[study_key])
     series_uid = generate_uid(entropy_srcs=[image_index, "series"])
     sop_uid = generate_uid(entropy_srcs=[image_index, "sop"])
 
@@ -110,6 +111,7 @@ def png_to_dicom(png_path, row, out_path) -> None:
     ds.SeriesInstanceUID = series_uid
     ds.SeriesNumber = 1
     ds.InstanceNumber = 1
+    ds.SeriesDescription = image_index  # NIH file name, for traceability
 
     #Patient
     #attaches the clean metadata from csv row directly to the file
