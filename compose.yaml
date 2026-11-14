@@ -14,6 +14,36 @@ services:
       ORTHANC__NAME: "ai_diag"
       ORTHANC__REGISTERED_USERS: |
         {"demo": "demo"}
+  worker:
+    build:
+      context: .
+      dockerfile: services/worker/Dockerfile
+    image: ai_diag-worker:dev
+    init: true
+    restart: unless-stopped
+    depends_on:
+      - orthanc
+    environment:
+      ORTHANC_URL: "http://orthanc:8042"
+      ORTHANC_USER: "demo"
+      ORTHANC_PASSWORD: "demo"
+      RESULTS_URL: "http://stub-api:8090/api/results"
+      WORKER_STATE: "/state/cursor.json"
+    volumes:
+      - worker-state:/state
+
+  stub-api:   # stand-in for the Go API (Step 12); start with --profile stub
+    image: ai_diag-worker:dev
+    init: true
+    pull_policy: never
+    profiles: ["stub"]
+    command: ["python", "-m", "src.serve.stub_api"]
+    environment:
+      STUB_HOST: "0.0.0.0"
+      STUB_FAIL_FIRST: "1"
+    volumes:
+      - ./data/interim/stub_api_docker:/app/data/interim/stub_api
 
 volumes:
   orthanc-db:
+  worker-state:

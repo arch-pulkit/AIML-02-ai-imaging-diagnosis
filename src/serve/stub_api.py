@@ -15,6 +15,7 @@ from src.data.nih import PROJECT_ROOT
 
 OUT_DIR = PROJECT_ROOT / "data" / "interim" / "stub_api"
 PORT = int(os.environ.get("STUB_PORT", "8090"))
+HOST = os.environ.get("STUB_HOST", "127.0.0.1")  # 0.0.0.0 inside Docker
 FAIL_FIRST = int(os.environ.get("STUB_FAIL_FIRST", "0"))
 
 
@@ -45,7 +46,7 @@ def main() -> None:
     print(
         f"stub API on http://localhost:{PORT}/api/results -> {OUT_DIR} (fail first {FAIL_FIRST})"
     )
-    ThreadingHTTPServer(("127.0.0.1", PORT), Handler).serve_forever()
+    ThreadingHTTPServer((HOST, PORT), Handler).serve_forever()
 
 
 if __name__ == "__main__":

@@ -1,0 +1,10 @@
+# Build-context allowlist: everything is excluded unless re-included below.
+*
+!src/
+!params.yaml
+!reports/thresholds.json
+!models/densenet121_best.pt
+!services/worker/requirements*.txt
+**/__pycache__
+**/*.pyc
+**/.DS_Store
