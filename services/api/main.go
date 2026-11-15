@@ -13,6 +13,9 @@ import (
 )
 
 func main() {
+	if len(os.Args) > 1 && os.Args[1] == "-healthcheck" {
+		os.Exit(runHealthcheck(os.Args[2:]))
+	}
 	if err := run(); err != nil {
 		slog.Error("api stopped", "err", err)
 		os.Exit(1)
