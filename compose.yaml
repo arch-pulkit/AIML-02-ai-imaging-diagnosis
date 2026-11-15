@@ -22,17 +22,39 @@ services:
     init: true
     restart: unless-stopped
     depends_on:
-      - orthanc
+      orthanc:
+        condition: service_started
+      api:
+        condition: service_healthy
     environment:
       ORTHANC_URL: "http://orthanc:8042"
       ORTHANC_USER: "demo"
       ORTHANC_PASSWORD: "demo"
-      RESULTS_URL: "http://stub-api:8090/api/results"
+      RESULTS_URL: "http://api:8080/api/results"
       WORKER_STATE: "/state/cursor.json"
     volumes:
       - worker-state:/state
 
-  stub-api:   # stand-in for the Go API (Step 12); start with --profile stub
+  api:
+    build:
+      context: services/api
+    image: ai_diag-api:dev
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8080:8080"
+    environment:
+      API_DB: "/data/api.db"
+    volumes:
+      - api-data:/data
+    healthcheck:
+      test: ["CMD", "/api", "-healthcheck", "http://127.0.0.1:8080/healthz"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+      start_interval: 1s
+
+  stub-api:   
     image: ai_diag-worker:dev
     init: true
     pull_policy: never
@@ -47,3 +69,4 @@ services:
 volumes:
   orthanc-db:
   worker-state:
+  api-data:
