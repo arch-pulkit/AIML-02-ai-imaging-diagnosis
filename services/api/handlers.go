@@ -17,6 +17,9 @@ func newMux(db *sql.DB, sqliteVer string) *http.ServeMux {
 		writeJSON(w, http.StatusOK, map[string]any{"status": "ok", "sqlite": sqliteVer, "schema_version": schemaVersion})
 	})
 	mux.HandleFunc("POST /api/results", handlePostResult(db))
+	mux.HandleFunc("GET /api/results", handleListResults(db))
+	mux.HandleFunc("GET /api/results/{id}", handleGetResult(db))
+	mux.HandleFunc("GET /api/results/{id}/heatmaps/{label}", handleGetHeatmap(db))
 	return mux
 }
 
