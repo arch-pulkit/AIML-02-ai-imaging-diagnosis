@@ -21,6 +21,9 @@ func newMux(db *sql.DB, sqliteVer string, orthanc *orthancClient) *http.ServeMux
 	mux.HandleFunc("GET /api/results/{id}", handleGetResult(db))
 	mux.HandleFunc("GET /api/results/{id}/heatmaps/{label}", handleGetHeatmap(db))
 	mux.HandleFunc("GET /api/results/{id}/preview", handlePreview(db, orthanc))
+	mux.HandleFunc("POST /api/results/{id}/decisions", handlePostDecision(db))
+	mux.HandleFunc("GET /api/audit", handleListAudit(db))
+	mux.HandleFunc("GET /api/audit/verify", handleVerifyAudit(db))
 	return mux
 }
 
