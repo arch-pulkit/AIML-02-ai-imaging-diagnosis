@@ -31,10 +31,10 @@ func getJSON(t *testing.T, h http.Handler, path string, wantStatus int, v any) {
 // seedReadDB stores an error row, then an ok row whose Hernia logit ties with
 // Nodule, then two decisions on the ok row (approve, then reject).
 // It returns the handler and the heatmap PNG bytes that were posted.
-func seedReadDB(t *testing.T) (http.Handler, []byte) {
+func seedReadDB(t *testing.T, oc *orthancClient) (http.Handler, []byte) {
 	t.Helper()
 	db := newTestDB(t)
-	mux := newMux(db, "test")
+	mux := newMux(db, "test", oc)
 	if rec := postResult(t, mux, mustJSON(t, errorPayload(readErrID))); rec.Code != http.StatusCreated {
 		t.Fatalf("post error row: %d %s", rec.Code, rec.Body.String())
 	}
@@ -59,7 +59,7 @@ func seedReadDB(t *testing.T) (http.Handler, []byte) {
 }
 
 func TestListResultsEmpty(t *testing.T) {
-	mux := newMux(newTestDB(t), "test")
+	mux := newMux(newTestDB(t), "test", nil)
 	rec := httptest.NewRecorder()
 	mux.ServeHTTP(rec, httptest.NewRequest(http.MethodGet, "/api/results", nil))
 	if rec.Code != http.StatusOK || rec.Body.String() != "{\"count\":0,\"results\":[]}\n" {
@@ -68,7 +68,7 @@ func TestListResultsEmpty(t *testing.T) {
 }
 
 func TestListResults(t *testing.T) {
-	mux, _ := seedReadDB(t)
+	mux, _ := seedReadDB(t, nil)
 	var got struct {
 		Count   int             `json:"count"`
 		Results []resultSummary `json:"results"`
@@ -93,7 +93,7 @@ func TestListResults(t *testing.T) {
 }
 
 func TestGetResultDetail(t *testing.T) {
-	mux, png := seedReadDB(t)
+	mux, png := seedReadDB(t, nil)
 	var d resultDetail
 	getJSON(t, mux, "/api/results/"+readOKID, http.StatusOK, &d)
 
@@ -133,7 +133,7 @@ func TestGetResultDetail(t *testing.T) {
 }
 
 func TestGetResultErrorRow(t *testing.T) {
-	mux, _ := seedReadDB(t)
+	mux, _ := seedReadDB(t, nil)
 	var d resultDetail
 	getJSON(t, mux, "/api/results/"+readErrID, http.StatusOK, &d)
 	if d.Status != "error" || d.Error == nil || d.ImageIndex != nil {
@@ -145,7 +145,7 @@ func TestGetResultErrorRow(t *testing.T) {
 }
 
 func TestReadNotFound(t *testing.T) {
-	mux, _ := seedReadDB(t)
+	mux, _ := seedReadDB(t, nil)
 	cases := []struct{ path, want string }{
 		{"/api/results/nope", "result not found"},
 		{"/api/results/" + readOKID + "/heatmaps/Hernia", "heatmap not found"}, // label exists, no heatmap stored

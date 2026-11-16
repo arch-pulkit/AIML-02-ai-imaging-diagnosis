@@ -85,7 +85,7 @@ func countRows(t *testing.T, db *sql.DB, table string) int {
 
 func TestPostResultOutcomes(t *testing.T) {
 	db := newTestDB(t)
-	mux := newMux(db, "test")
+	mux := newMux(db, "test", nil)
 	heatmap := grayPNG(t, 224, 224)
 
 	steps := []struct {
@@ -141,7 +141,7 @@ func TestPostResultOutcomes(t *testing.T) {
 
 func TestPostResultRejects(t *testing.T) {
 	db := newTestDB(t)
-	mux := newMux(db, "test")
+	mux := newMux(db, "test", nil)
 	heatmap := grayPNG(t, 224, 224)
 	small := grayPNG(t, 100, 100)
 	toError := func(m map[string]any) {
@@ -213,7 +213,7 @@ func TestPostResultRejects(t *testing.T) {
 func TestPostResultTooLarge(t *testing.T) {
 	db := newTestDB(t)
 	// Spaces are valid JSON whitespace, so the decoder keeps reading until the size limit trips.
-	rec := postResult(t, newMux(db, "test"), bytes.Repeat([]byte(" "), maxResultBytes+1))
+	rec := postResult(t, newMux(db, "test", nil), bytes.Repeat([]byte(" "), maxResultBytes+1))
 	if rec.Code != http.StatusRequestEntityTooLarge {
 		t.Fatalf("got %d %s, want 413", rec.Code, rec.Body.String())
 	}
@@ -221,7 +221,7 @@ func TestPostResultTooLarge(t *testing.T) {
 
 func TestAuditDetectsTampering(t *testing.T) {
 	db := newTestDB(t)
-	mux := newMux(db, "test")
+	mux := newMux(db, "test", nil)
 	heatmap := grayPNG(t, 224, 224)
 	for _, id := range []string{"A", "B"} {
 		if rec := postResult(t, mux, mustJSON(t, validPayload(id, heatmap))); rec.Code != http.StatusCreated {
@@ -254,7 +254,7 @@ func TestRealWorkerPayloads(t *testing.T) {
 		t.Skip("no stub payloads in data/interim/stub_api_docker (local scratch)")
 	}
 	db := newTestDB(t)
-	mux := newMux(db, "test")
+	mux := newMux(db, "test", nil)
 	for _, want := range []int{http.StatusCreated, http.StatusOK} { // second pass = worker retries
 		for _, f := range files {
 			body, err := os.ReadFile(f)

@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func newMux(db *sql.DB, sqliteVer string) *http.ServeMux {
+func newMux(db *sql.DB, sqliteVer string, orthanc *orthancClient) *http.ServeMux {
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /healthz", func(w http.ResponseWriter, r *http.Request) {
 		if err := db.PingContext(r.Context()); err != nil {
@@ -20,6 +20,7 @@ func newMux(db *sql.DB, sqliteVer string) *http.ServeMux {
 	mux.HandleFunc("GET /api/results", handleListResults(db))
 	mux.HandleFunc("GET /api/results/{id}", handleGetResult(db))
 	mux.HandleFunc("GET /api/results/{id}/heatmaps/{label}", handleGetHeatmap(db))
+	mux.HandleFunc("GET /api/results/{id}/preview", handlePreview(db, orthanc))
 	return mux
 }
 

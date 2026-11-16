@@ -31,6 +31,12 @@ func run() error {
 	if addr == "" {
 		addr = ":8080"
 	}
+	orthancURL := os.Getenv("ORTHANC_URL")
+	if orthancURL == "" {
+		return errors.New("ORTHANC_URL is not set (Orthanc REST base URL, for image previews)")
+	}
+	orthanc := newOrthancClient(orthancURL, os.Getenv("ORTHANC_USER"), os.Getenv("ORTHANC_PASSWORD"))
+	slog.Info("orthanc client", "url", orthancURL)
 
 	db, err := openDB(dbPath)
 	if err != nil {
@@ -45,7 +51,7 @@ func run() error {
 
 	srv := &http.Server{
 		Addr:              addr,
-		Handler:           newMux(db, version),
+		Handler:           newMux(db, version, orthanc),
 		ReadHeaderTimeout: 5 * time.Second,
 		ReadTimeout:       30 * time.Second,
 		WriteTimeout:      30 * time.Second,

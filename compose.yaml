@@ -44,6 +44,9 @@ services:
       - "127.0.0.1:8080:8080"
     environment:
       API_DB: "/data/api.db"
+      ORTHANC_URL: "http://orthanc:8042"
+      ORTHANC_USER: "demo"
+      ORTHANC_PASSWORD: "demo"
     volumes:
       - api-data:/data
     healthcheck:
