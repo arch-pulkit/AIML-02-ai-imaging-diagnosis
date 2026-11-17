@@ -2,12 +2,14 @@ import { useEffect, useState } from 'react'
 import { getResult, previewUrl } from '../api.js'
 import ImageOverlay from '../components/ImageOverlay.jsx'
 import LabelsTable from '../components/LabelsTable.jsx'
+import DecisionForm from '../components/DecisionForm.jsx'
 import { formatTime } from '../format.js'
 
 export default function Detail({ id }) {
   const [state, setState] = useState({ status: 'loading' })
   const [selected, setSelected] = useState(null)
   const [opacity, setOpacity] = useState(0.5)
+  const [reload, setReload] = useState(0)
 
   useEffect(() => {
     const controller = new AbortController()
@@ -18,7 +20,7 @@ export default function Detail({ id }) {
         setState({ status: 'error', message: err.message })
       })
     return () => controller.abort()
-  }, [id])
+  }, [id, reload])
 
   if (state.status === 'loading') return <p>Loading result…</p>
   if (state.status === 'error')
@@ -88,7 +90,13 @@ export default function Detail({ id }) {
         </div>
       )}
 
-      <h2>Decisions</h2>
+      {r.status === 'ok' ? (
+        <DecisionForm resultId={r.orthanc_instance_id} onDecided={() => setReload((n) => n + 1)} />
+      ) : (
+        <p className="muted">Decisions are only possible for successfully analysed results.</p>
+      )}
+
+      <h2>Decision history</h2>
       {r.decisions.length === 0 ? (
         <p className="muted">No decisions yet.</p>
       ) : (

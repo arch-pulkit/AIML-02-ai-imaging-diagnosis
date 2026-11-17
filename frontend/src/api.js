@@ -51,3 +51,12 @@ export function getResult(id, { signal } = {}) {
 export function previewUrl(id) {
   return `/api/results/${encodeURIComponent(id)}/preview`
 }
+
+// POST /api/results/{id}/decisions -> 201 { id, orthanc_instance_id, decision, comment, reviewer, decided_at }
+export function postDecision(id, { decision, reviewer, comment }) {
+  return request(`/api/results/${encodeURIComponent(id)}/decisions`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ decision, reviewer, comment }),
+  })
+}
