@@ -1,4 +1,5 @@
 import Banner from './components/Banner.jsx'
+import Detail from './pages/Detail.jsx'
 import Worklist from './pages/Worklist.jsx'
 import { useHashRoute } from './route.js'
 import './App.css'
@@ -17,7 +18,7 @@ export default function App() {
 
   let page
   if (route.page === 'worklist') page = <Worklist />
-  else if (route.page === 'detail') page = <Placeholder title={`Result ${route.id}`} />
+  else if (route.page === 'detail') page = <Detail key={route.id} id={route.id} />
   else if (route.page === 'audit') page = <Placeholder title="Audit log" />
   else
     page = (

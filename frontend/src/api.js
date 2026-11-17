@@ -41,3 +41,13 @@ async function request(path, options = {}) {
 export function listResults({ signal } = {}) {
   return request('/api/results', { signal })
 }
+
+// GET /api/results/{id} -> summary + model + labels[] (sorted by logit) + decisions[]
+export function getResult(id, { signal } = {}) {
+  return request(`/api/results/${encodeURIComponent(id)}`, { signal })
+}
+
+// Image URLs go straight into <img src>; the browser fetches them itself.
+export function previewUrl(id) {
+  return `/api/results/${encodeURIComponent(id)}/preview`
+}

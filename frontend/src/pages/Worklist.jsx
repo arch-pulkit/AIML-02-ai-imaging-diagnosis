@@ -1,12 +1,7 @@
 import { useEffect, useState } from 'react'
 import { listResults } from '../api.js'
 import { resultHref } from '../route.js'
-
-// Stored times are UTC; show local time, keep the exact UTC value in the tooltip.
-function formatTime(iso) {
-  const d = new Date(iso)
-  return Number.isNaN(d.getTime()) ? iso : d.toLocaleString()
-}
+import { formatTime } from '../format.js'
 
 function DecisionCell({ decision }) {
   if (!decision) return <span className="pill pending">pending</span>
