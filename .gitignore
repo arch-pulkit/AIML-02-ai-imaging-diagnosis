@@ -12,3 +12,5 @@ __pycache__/
 # scratch (ignored on purpose)
 data/interim/
 NOTES.md
+node_modules/
+dist/
