@@ -1,17 +1,9 @@
 import Banner from './components/Banner.jsx'
+import Audit from './pages/Audit.jsx'
 import Detail from './pages/Detail.jsx'
 import Worklist from './pages/Worklist.jsx'
 import { useHashRoute } from './route.js'
 import './App.css'
-
-function Placeholder({ title }) {
-  return (
-    <section>
-      <h1>{title}</h1>
-      <p className="muted">Coming in a later step.</p>
-    </section>
-  )
-}
 
 export default function App() {
   const route = useHashRoute()
@@ -19,7 +11,7 @@ export default function App() {
   let page
   if (route.page === 'worklist') page = <Worklist />
   else if (route.page === 'detail') page = <Detail key={route.id} id={route.id} />
-  else if (route.page === 'audit') page = <Placeholder title="Audit log" />
+  else if (route.page === 'audit') page = <Audit />
   else
     page = (
       <section>

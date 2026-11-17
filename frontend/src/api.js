@@ -3,10 +3,11 @@
 // so the same build works in both without knowing where the API runs.
 
 export class ApiError extends Error {
-  constructor(status, message) {
+  constructor(status, message, body = null) {
     super(message)
     this.name = 'ApiError'
     this.status = status
+    this.body = body
   }
 }
 
@@ -29,7 +30,7 @@ async function request(path, options = {}) {
   }
   if (!res.ok) {
     const detail = body && typeof body.error === 'string' ? body.error : res.statusText || 'request failed'
-    throw new ApiError(res.status, `HTTP ${res.status}: ${detail}`)
+    throw new ApiError(res.status, `HTTP ${res.status}: ${detail}`, body)
   }
   if (body === null) {
     throw new ApiError(res.status, 'expected JSON from the API')
@@ -59,4 +60,20 @@ export function postDecision(id, { decision, reviewer, comment }) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ decision, reviewer, comment }),
   })
+}
+
+// GET /api/audit?after=SEQ&limit=N -> { entries: [...], next_after: SEQ | null }
+export function listAudit(after, { signal, limit = 50 } = {}) {
+  return request(`/api/audit?after=${after}&limit=${limit}`, { signal })
+}
+
+// GET /api/audit/verify -> 200 { ok: true, rows, last_hash } or 500 { ok: false, rows, error }.
+// A 500 with ok:false IS the answer (chain broken), so return it instead of throwing.
+export async function verifyAudit({ signal } = {}) {
+  try {
+    return await request('/api/audit/verify', { signal })
+  } catch (err) {
+    if (err instanceof ApiError && err.status === 500 && err.body && err.body.ok === false) return err.body
+    throw err
+  }
 }
