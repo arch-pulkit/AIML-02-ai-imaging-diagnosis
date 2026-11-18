@@ -69,6 +69,23 @@ services:
     volumes:
       - ./data/interim/stub_api_docker:/app/data/interim/stub_api
 
+  frontend:
+    build:
+      context: ./frontend
+    image: ai_diag-frontend:dev
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3000:8080"
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8080/"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
 volumes:
   orthanc-db:
   worker-state:
