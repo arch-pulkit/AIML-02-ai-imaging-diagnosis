@@ -53,7 +53,7 @@ Built by Pulkit ([@arch-pulkit](https://github.com/arch-pulkit)) as internship p
 
 **Segmentation (results only, not served)**
 - 3D U-Net in MONAI (4.8 M parameters) on the Medical Segmentation Decathlon spleen task (41 CTs, 33 train / 8 val),
-  Dice loss, 600 epochs on a Kaggle T4, reproduced on the Mac (`notebooks/04_spleen_unet.ipynb`).
+  Dice loss, 600 epochs, trained and evaluated on a Kaggle T4 (`notebooks/04_spleen_unet.ipynb`).
 
 **Serving pipeline**
 - **Orthanc** DICOM server (login from `.env`, never overwrites stored instances).
