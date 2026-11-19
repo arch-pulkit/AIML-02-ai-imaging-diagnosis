@@ -14,3 +14,4 @@ data/interim/
 NOTES.md
 node_modules/
 dist/
+.env

@@ -13,7 +13,7 @@ services:
     environment:
       ORTHANC__NAME: "ai_diag"
       ORTHANC__REGISTERED_USERS: |
-        {"demo": "demo"}
+        {"${ORTHANC_USER:?copy .env.example to .env}": "${ORTHANC_PASSWORD:?copy .env.example to .env}"}
   worker:
     build:
       context: .
@@ -28,8 +28,8 @@ services:
         condition: service_healthy
     environment:
       ORTHANC_URL: "http://orthanc:8042"
-      ORTHANC_USER: "demo"
-      ORTHANC_PASSWORD: "demo"
+      ORTHANC_USER: "${ORTHANC_USER:?copy .env.example to .env}"
+      ORTHANC_PASSWORD: "${ORTHANC_PASSWORD:?copy .env.example to .env}"
       RESULTS_URL: "http://api:8080/api/results"
       WORKER_STATE: "/state/cursor.json"
     volumes:
@@ -45,8 +45,8 @@ services:
     environment:
       API_DB: "/data/api.db"
       ORTHANC_URL: "http://orthanc:8042"
-      ORTHANC_USER: "demo"
-      ORTHANC_PASSWORD: "demo"
+      ORTHANC_USER: "${ORTHANC_USER:?copy .env.example to .env}"
+      ORTHANC_PASSWORD: "${ORTHANC_PASSWORD:?copy .env.example to .env}"
     volumes:
       - api-data:/data
     healthcheck:
