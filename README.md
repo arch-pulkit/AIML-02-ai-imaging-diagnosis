@@ -14,11 +14,10 @@ Built by Pulkit ([@arch-pulkit](https://github.com/arch-pulkit)) as internship p
 |---|---|
 | Working demo (screen recording) | *link added after recording* |
 | Setup instructions | [Quick start](#quick-start-demo-about-10-minutes) · [Full reproduction](#full-reproduction-data--training) |
-| Architecture diagram | [Architecture](#architecture) · `docs/ARCHITECTURE.md` |
-| API and data documentation | `docs/API.md` · `docs/DATA.md` |
-| Test results and accuracy | [Testing](#testing) · [Results](#results) · `docs/MODEL_CARD.md` |
-| Presentation and reflection | `docs/presentation.pdf` · `docs/REFLECTION.md` |
-| Development log | `docs/DEVLOG.md` |
+| Architecture diagram | [Architecture](#architecture) · [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) |
+| API and data documentation | [`docs/API.md`](docs/API.md) · [`docs/DATA.md`](docs/DATA.md) |
+| Test results and accuracy | [Testing](#testing) · [Results](#results) · [`docs/MODEL_CARD.md`](docs/MODEL_CARD.md) |
+| Presentation and reflection | *added after the demo* |
 
 ## Screenshots
 
@@ -139,7 +138,7 @@ name, then open **Audit log**. The badge is green and the newest row is your dec
 | URL | What |
 |---|---|
 | http://127.0.0.1:3000 | Review viewer |
-| http://127.0.0.1:8080/api/results | Results API (JSON), see `docs/API.md` |
+| http://127.0.0.1:8080/api/results | Results API (JSON), see [`docs/API.md`](docs/API.md) |
 | http://127.0.0.1:8042 | Orthanc Explorer (login from `.env`, default `demo` / `demo`) |
 
 Stop with `docker compose down`, which keeps all data. `docker compose down -v` **deletes** the volumes: Orthanc's
@@ -162,7 +161,7 @@ so a second checkout of this repo controls the same containers and volumes.
 | Cardiomegaly | 0.890 | Nodule | 0.736 |
 
 - The drop from validation to test comes from selection optimism plus a sicker test set (Effusion 18.2 % vs 10.0 %;
-  AP view 57 % vs 35 %).
+  AP view 57 % vs 34 %).
 - **Low precision for rare labels:** for example, Hernia PPV is 0.021 at the chosen threshold. The demo images get a
   median of 6 flags each, so flags are for screening, not diagnosis.
 - **Subgroups:** no gap by sex, a slight decline with age, and a **view shortcut**: the Edema logit predicts the AP
@@ -178,7 +177,7 @@ so a second checkout of this repo controls the same containers and volumes.
 |---|---|
 | Best (epoch 425) | 0.942 |
 | Plateau median | 0.895 (IQR 0.875–0.906) |
-| Last epoch | 0.823 (2 volumes missed) |
+| Last epoch | 0.823 (2 volumes only partly segmented: Dice 0.26 and 0.65) |
 
 With only 41 volumes, a validation set used for checkpoint selection, and no separate test set, these numbers are
 optimistic.
@@ -207,7 +206,7 @@ and duplicates, decision validation, audit paging, hash verification with tamper
 proxy's error mapping, the container health check, and a replay of real worker payloads. Key tests were mutation-checked: the code was deliberately broken to confirm that the test
 fails for the specific reason.
 
-End-to-end checks done by hand (recorded in `docs/DEVLOG.md`): the overlay alignment matches an independent Python
+End-to-end checks done by hand: the overlay alignment matches an independent Python
 composite; the viewer behaves correctly when Orthanc or the API is down; a double-click bug was found through the
 audit log and fixed; the full quick start was run from a fresh GitHub clone (assets verified, 4 services up, 42
 results ingested, audit chain verified).
@@ -254,7 +253,7 @@ There is no DVC remote: the 45 GB dataset is public and is re-downloaded from it
 | `scripts/` | `fetch_assets.sh`, `load_demo.sh` |
 | `assets/SHA256SUMS` | Checksums of the release assets, at their destination paths |
 | `tests/` | Python tests |
-| `notebooks/` | DICOM basics, NIH data exploration, model check, spleen U-Net |
+| `notebooks/` | DICOM basics, NIH data exploration, spleen U-Net |
 | `reports/` | Metrics and figures written by the DVC pipeline |
 | `dvc.yaml`, `dvc.lock`, `params.yaml` | Pipeline, its locked state, hyper-parameters |
 | `compose.yaml`, `.env.example` | The demo stack and its settings |
@@ -273,7 +272,7 @@ There is no DVC remote: the 45 GB dataset is public and is re-downloaded from it
 - The worker retries any 4xx answer indefinitely (the API answers 2xx for duplicates), so a misconfigured login shows
   up as repeated warnings in the worker log.
 - The worklist is not paginated. The API logs browser-cancelled requests as errors.
-- The full list, with evidence, is in `docs/MODEL_CARD.md`.
+- The full list, with evidence, is in [`docs/MODEL_CARD.md`](docs/MODEL_CARD.md).
 
 ## Data attribution and licence
 
