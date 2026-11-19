@@ -3,7 +3,7 @@ name: ai_diag
 
 services:
   orthanc:
-    image: orthancteam/orthanc:latest    
+    image: orthancteam/orthanc:latest@sha256:06b8baab0c63cd58de5474a74b64096a82ea3f7eab2aa471e217cc48c9ae11bf    
     restart: unless-stopped
     ports:
       - "127.0.0.1:8042:8042"   #REST API + web UI
