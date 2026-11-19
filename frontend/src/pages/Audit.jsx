@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react'
-import { listAudit, listResults, verifyAudit } from '../api.js'
+import { listAuditNewest, listResults, verifyAudit } from '../api.js'
 import { formatTime } from '../format.js'
 import { resultHref } from '../route.js'
 
 const short = (h) => (h ? h.slice(0, 12) : '')
+
+// Same value as genesisHash in services/api/audit.go: the prev_hash of seq 1.
+const GENESIS = '0'.repeat(64)
 
 function VerifyBadge({ verify }) {
   if (verify.status === 'loading') return <p className="badge grey-badge">Verifying chain…</p>
@@ -39,11 +42,21 @@ function DetailsCell({ e }) {
   return <span className="mono details-json">{d == null ? '' : JSON.stringify(d)}</span>
 }
 
-// The "link" column only compares prev_hash with the previous row's hash in the browser.
+// Rows are newest first, so a row's predecessor in the chain is the row BELOW it.
+// Returns true/false, or null when that older row is not loaded yet.
+function linkState(entries, i) {
+  const e = entries[i]
+  const older = entries[i + 1]
+  if (older) return e.prev_hash === older.hash
+  if (e.seq === 1) return e.prev_hash === GENESIS
+  return null
+}
+
+// The "link" column only compares hashes in the browser.
 // The real check is the server's verify, which recomputes every hash from the row contents.
 export default function Audit() {
   const [verify, setVerify] = useState({ status: 'loading' })
-  const [log, setLog] = useState({ status: 'loading', entries: [], nextAfter: null })
+  const [log, setLog] = useState({ status: 'loading', entries: [], nextBefore: null })
   const [names, setNames] = useState({})
   const [loadingMore, setLoadingMore] = useState(false)
 
@@ -54,10 +67,10 @@ export default function Audit() {
       .catch((err) => {
         if (err.name !== 'AbortError') setVerify({ status: 'error', message: err.message })
       })
-    listAudit(0, { signal: c.signal })
-      .then((p) => setLog({ status: 'ready', entries: p.entries, nextAfter: p.next_after }))
+    listAuditNewest(null, { signal: c.signal })
+      .then((p) => setLog({ status: 'ready', entries: p.entries, nextBefore: p.next_before }))
       .catch((err) => {
-        if (err.name !== 'AbortError') setLog({ status: 'error', entries: [], nextAfter: null, message: err.message })
+        if (err.name !== 'AbortError') setLog({ status: 'error', entries: [], nextBefore: null, message: err.message })
       })
     listResults({ signal: c.signal })
       .then((d) => setNames(Object.fromEntries(d.results.map((r) => [r.orthanc_instance_id, r.image_index]))))
@@ -67,12 +80,12 @@ export default function Audit() {
     return () => c.abort()
   }, [])
 
-  async function loadMore() {
-    if (loadingMore || log.nextAfter == null) return
+  async function loadOlder() {
+    if (loadingMore || log.nextBefore == null) return
     setLoadingMore(true)
     try {
-      const p = await listAudit(log.nextAfter)
-      setLog((prev) => ({ ...prev, entries: [...prev.entries, ...p.entries], nextAfter: p.next_after, moreError: null }))
+      const p = await listAuditNewest(log.nextBefore)
+      setLog((prev) => ({ ...prev, entries: [...prev.entries, ...p.entries], nextBefore: p.next_before, moreError: null }))
     } catch (err) {
       setLog((prev) => ({ ...prev, moreError: err.message }))
     } finally {
@@ -89,7 +102,7 @@ export default function Audit() {
       {log.status === 'ready' && (
         <>
           <p className="muted">
-            Showing {log.entries.length} entries, oldest first. Every result and decision is recorded; nothing
+            Showing {log.entries.length} entries, newest first. Every result and decision is recorded; nothing
             can be edited or deleted.
           </p>
           <table className="audit">
@@ -107,8 +120,7 @@ export default function Audit() {
             </thead>
             <tbody>
               {log.entries.map((e, i) => {
-                const prev = i > 0 ? log.entries[i - 1] : null
-                const linked = prev ? e.prev_hash === prev.hash : null
+                const linked = linkState(log.entries, i)
                 const id = e.orthanc_instance_id
                 return (
                   <tr key={e.seq}>
@@ -124,17 +136,25 @@ export default function Audit() {
                       {short(e.prev_hash)} → {short(e.hash)}
                     </td>
                     <td>
-                      {linked === null ? '' : linked ? <span className="link-ok">✓</span> : <span className="link-bad">✗</span>}
+                      {linked === null ? (
+                        <span className="muted" title="Load older entries to check this link">
+                          …
+                        </span>
+                      ) : linked ? (
+                        <span className="link-ok">✓</span>
+                      ) : (
+                        <span className="link-bad">✗</span>
+                      )}
                     </td>
                   </tr>
                 )
               })}
             </tbody>
           </table>
-          {log.moreError && <p className="error">Could not load more: {log.moreError}</p>}
-          {log.nextAfter != null && (
-            <button type="button" className="load-more" disabled={loadingMore} onClick={loadMore}>
-              {loadingMore ? 'Loading…' : 'Load more'}
+          {log.moreError && <p className="error">Could not load older entries: {log.moreError}</p>}
+          {log.nextBefore != null && (
+            <button type="button" className="load-more" disabled={loadingMore} onClick={loadOlder}>
+              {loadingMore ? 'Loading…' : 'Load older'}
             </button>
           )}
         </>

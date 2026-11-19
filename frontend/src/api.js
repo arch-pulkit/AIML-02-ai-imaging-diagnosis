@@ -62,9 +62,11 @@ export function postDecision(id, { decision, reviewer, comment }) {
   })
 }
 
-// GET /api/audit?after=SEQ&limit=N -> { entries: [...], next_after: SEQ | null }
-export function listAudit(after, { signal, limit = 50 } = {}) {
-  return request(`/api/audit?after=${after}&limit=${limit}`, { signal })
+// GET /api/audit?order=desc[&before=SEQ]&limit=N -> { entries (newest first), next_before }.
+// before = null asks for the newest page; pass the previous page's next_before to go further back.
+export function listAuditNewest(before, { signal, limit = 50 } = {}) {
+  const from = before == null ? '' : `&before=${before}`
+  return request(`/api/audit?order=desc${from}&limit=${limit}`, { signal })
 }
 
 // GET /api/audit/verify -> 200 { ok: true, rows, last_hash } or 500 { ok: false, rows, error }.
