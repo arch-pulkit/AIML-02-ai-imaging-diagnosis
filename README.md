@@ -206,7 +206,8 @@ and duplicates, decision validation, audit paging, hash verification with tamper
 proxy's error mapping, the container health check, and a replay of real worker payloads. Key tests were mutation-checked: the code was deliberately broken to confirm that the test
 fails for the specific reason.
 
-End-to-end checks done by hand: the overlay alignment matches an independent Python
+End-to-end checks done by hand: the served logits for all 42 demo images match the offline test predictions
+(588 logits, max difference 7.2e-6), so the DICOM serving path reproduces the PNG pipeline; the overlay alignment matches an independent Python
 composite; the viewer behaves correctly when Orthanc or the API is down; a double-click bug was found through the
 audit log and fixed; the full quick start was run from a fresh GitHub clone (assets verified, 4 services up, 42
 results ingested, audit chain verified).
