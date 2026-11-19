@@ -126,7 +126,8 @@ What you should see:
 1. `fetch_assets.sh` downloads the model checkpoint (27 MB) and 42 demo DICOMs (26 MB) from the
    [`assets-v1` release](https://github.com/arch-pulkit/AIML-02-ai-imaging-diagnosis/releases/tag/assets-v1) and
    prints `OK: 43 files verified against assets/SHA256SUMS`. It must run **before** the build, because the worker
-   image contains the checkpoint.
+   image contains the checkpoint. The 42 DICOMs are the seeded 40-image subset (`data/demo/demo_subset.csv`)
+   plus `00000003_000` and `00000003_001`, the two images used for the first Orthanc test.
 2. `docker compose up -d --build --wait` returns once all 4 services are up.
 3. `load_demo.sh` prints `uploaded 42 files … Success 42, AlreadyStored 0`.
 4. The worker analyses each image in about 1–1.5 s on CPU. Open **http://127.0.0.1:3000**: within about a minute the
@@ -231,7 +232,9 @@ The quick start uses the published checkpoint. To rebuild everything from the ra
 3. **Run the pipeline:** `dvc repro`. Training takes about 5 h on an Apple M4 (MPS). The metrics land in `reports/`.
 4. **Segmentation:** `notebooks/04_spleen_unet.ipynb` (MSD Task09 Spleen; 600 epochs on a Kaggle T4).
 5. **Demo DICOMs from your own copy:** `python -m src.data.demo_subset --upload` re-selects the seeded 40-image subset
-   (`data/demo/demo_subset.csv`), converts it to DICOM and uploads it to Orthanc.
+   (`data/demo/demo_subset.csv`), converts it to DICOM and uploads it to Orthanc. This gives 40 of the 42 demo
+   images; the other two (`00000003_000`, `00000003_001`, used in the *Try it* step) come from the release via
+   `fetch_assets.sh` + `load_demo.sh`.
 
 There is no DVC remote: the 45 GB dataset is public and is re-downloaded from its source instead.
 
@@ -259,7 +262,10 @@ There is no DVC remote: the 45 GB dataset is public and is re-downloaded from it
 - **Not a medical device.** The labels are NLP-mined from reports and noisy, and the data comes from one hospital.
   The view-position shortcut and low precision for rare findings mean the flags must not be read as diagnoses.
 - **No authentication:** the reviewer name is self-declared. All ports are bound to localhost only.
-- Two clicks within one save are prevented by the viewer, but the API has no idempotency key, so two separate POSTs
+- **Not tested on real scanner DICOMs:** the demo images are NIH PNGs converted to 8-bit Secondary Capture DICOMs.
+  Real scanner output (12–16-bit pixel data, other vendors or modalities) has not been tested end to end, and only
+  chest X-rays are served; the CT segmentation model is results-only.
+- The viewer locks the form after a save, so a double-click records one decision, but the API has no idempotency key, so two separate POSTs
   record two decisions.
 - Audit-log truncation is detected only against an externally kept anchor hash (shown on the audit page).
 - The worker retries any 4xx answer indefinitely (the API answers 2xx for duplicates), so a misconfigured login shows
