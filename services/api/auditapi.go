@@ -3,8 +3,10 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log/slog"
+	"math"
 	"net/http"
 	"strconv"
 )
@@ -39,11 +41,37 @@ func queryInt(r *http.Request, name string, def int64) (int64, error) {
 	return n, nil
 }
 
+// handleListAudit pages the audit log. order=asc (default) with after=SEQ returns next_after;
+// order=desc with optional before=SEQ returns the newest rows first and next_before.
 func handleListAudit(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		q := r.URL.Query()
+		order := q.Get("order")
+		if order == "" {
+			order = "asc"
+		}
+		badRequest := func(err error) {
+			writeJSON(w, http.StatusBadRequest, map[string]any{"error": err.Error()})
+		}
+		switch {
+		case order != "asc" && order != "desc":
+			badRequest(errors.New(`order must be "asc" or "desc"`))
+			return
+		case order == "asc" && q.Has("before"):
+			badRequest(errors.New("before needs order=desc"))
+			return
+		case order == "desc" && q.Has("after"):
+			badRequest(errors.New("after needs order=asc"))
+			return
+		}
 		after, err := queryInt(r, "after", 0)
 		if err != nil {
-			writeJSON(w, http.StatusBadRequest, map[string]any{"error": err.Error()})
+			badRequest(err)
+			return
+		}
+		before, err := queryInt(r, "before", math.MaxInt64)
+		if err != nil {
+			badRequest(err)
 			return
 		}
 		limit, err := queryInt(r, "limit", defaultAuditLimit)
@@ -51,12 +79,15 @@ func handleListAudit(db *sql.DB) http.HandlerFunc {
 			err = fmt.Errorf("limit must be between 1 and %d", maxAuditLimit)
 		}
 		if err != nil {
-			writeJSON(w, http.StatusBadRequest, map[string]any{"error": err.Error()})
+			badRequest(err)
 			return
 		}
-		rows, err := db.QueryContext(r.Context(),
-			`SELECT seq, at, actor, action, orthanc_instance_id, details_json, prev_hash, hash
-			 FROM audit_log WHERE seq > ? ORDER BY seq LIMIT ?`, after, limit)
+		const cols = `SELECT seq, at, actor, action, orthanc_instance_id, details_json, prev_hash, hash FROM audit_log`
+		query, cursor, nextKey := cols+` WHERE seq > ? ORDER BY seq LIMIT ?`, after, "next_after"
+		if order == "desc" {
+			query, cursor, nextKey = cols+` WHERE seq < ? ORDER BY seq DESC LIMIT ?`, before, "next_before"
+		}
+		rows, err := db.QueryContext(r.Context(), query, cursor, limit)
 		if err != nil {
 			serverError(w, "list audit", err)
 			return
@@ -77,9 +108,9 @@ func handleListAudit(db *sql.DB) http.HandlerFunc {
 			serverError(w, "list audit", err)
 			return
 		}
-		resp := map[string]any{"entries": entries, "next_after": nil}
+		resp := map[string]any{"entries": entries, nextKey: nil}
 		if int64(len(entries)) == limit {
-			resp["next_after"] = entries[len(entries)-1].Seq
+			resp[nextKey] = entries[len(entries)-1].Seq
 		}
 		writeJSON(w, http.StatusOK, resp)
 	}

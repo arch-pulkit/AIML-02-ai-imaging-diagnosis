@@ -169,3 +169,50 @@ func TestAuditEndpoints(t *testing.T) {
 		t.Fatalf("verify after forgery: %+v, want ok false with seq 4: hash mismatch", bad)
 	}
 }
+
+func TestAuditNewestFirst(t *testing.T) {
+	_, mux := seedDecisionDB(t)
+	if rec := postDecision(t, mux, readOKID, `{"decision":"approve","reviewer":"dr_a"}`); rec.Code != http.StatusCreated {
+		t.Fatalf("approve: %d %s", rec.Code, rec.Body.String())
+	}
+
+	type page struct {
+		Entries    []auditEntry `json:"entries"`
+		NextBefore *int64       `json:"next_before"`
+	}
+	var p1, p2, p3 page
+	getJSON(t, mux, "/api/audit?order=desc&limit=2", http.StatusOK, &p1)
+	if len(p1.Entries) != 2 || p1.Entries[0].Seq != 3 || p1.Entries[1].Seq != 2 || p1.NextBefore == nil || *p1.NextBefore != 2 {
+		t.Fatalf("page 1: %+v; want seq 3, 2 and next_before 2", p1)
+	}
+	if p1.Entries[0].Actor != "dr_a" || p1.Entries[0].PrevHash != p1.Entries[1].Hash {
+		t.Fatalf("page 1: newest row %+v is not dr_a's decision linked to seq 2", p1.Entries[0])
+	}
+	getJSON(t, mux, "/api/audit?order=desc&before=2&limit=2", http.StatusOK, &p2)
+	if len(p2.Entries) != 1 || p2.Entries[0].Seq != 1 || p2.NextBefore != nil {
+		t.Fatalf("page 2: %+v; want only seq 1 and next_before null", p2)
+	}
+	if p2.Entries[0].PrevHash != genesisHash {
+		t.Fatalf("seq 1 prev_hash %s, want the genesis hash", p2.Entries[0].PrevHash)
+	}
+	getJSON(t, mux, "/api/audit?order=desc&before=1", http.StatusOK, &p3)
+	if len(p3.Entries) != 0 || p3.NextBefore != nil {
+		t.Fatalf("before=1: %+v; want no entries and next_before null", p3)
+	}
+
+	cases := []struct{ q, want string }{
+		{"order=up", `order must be "asc" or "desc"`},
+		{"before=5", "before needs order=desc"},
+		{"order=asc&before=5", "before needs order=desc"},
+		{"order=desc&after=1", "after needs order=asc"},
+		{"order=desc&before=-1", "before must be a non-negative integer"},
+		{"order=desc&limit=0", "limit must be between 1 and 1000"},
+	}
+	for _, c := range cases {
+		var body map[string]string
+		getJSON(t, mux, "/api/audit?"+c.q, http.StatusBadRequest, &body)
+		if body["error"] != c.want {
+			t.Fatalf("%s: error %q, want %q", c.q, body["error"], c.want)
+		}
+	}
+}
