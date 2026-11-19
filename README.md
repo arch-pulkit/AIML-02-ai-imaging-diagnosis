@@ -143,7 +143,8 @@ name, then open **Audit log**. The badge is green and the newest row is your dec
 | http://127.0.0.1:8042 | Orthanc Explorer (login from `.env`, default `demo` / `demo`) |
 
 Stop with `docker compose down`, which keeps all data. `docker compose down -v` **deletes** the volumes: Orthanc's
-store, the results database with its audit log, and the worker's cursor.
+store, the results database with its audit log, and the worker's cursor. The Compose project is named `ai_diag`,
+so a second checkout of this repo controls the same containers and volumes.
 
 ## Results
 
@@ -208,7 +209,8 @@ fails for the specific reason.
 
 End-to-end checks done by hand (recorded in `docs/DEVLOG.md`): the overlay alignment matches an independent Python
 composite; the viewer behaves correctly when Orthanc or the API is down; a double-click bug was found through the
-audit log and fixed; the demo assets were verified from a fresh clone.
+audit log and fixed; the full quick start was run from a fresh GitHub clone (assets verified, 4 services up, 42
+results ingested, audit chain verified).
 
 ## Full reproduction (data → training)
 
