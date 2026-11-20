@@ -12,12 +12,12 @@ Built by Pulkit ([@arch-pulkit](https://github.com/arch-pulkit)) as internship p
 
 | Deliverable | Where |
 |---|---|
-| Working demo (screen recording) | *link added after recording* |
+| Working demo (screen recording) | [Release `demo-v1`](https://github.com/arch-pulkit/AIML-02-ai-imaging-diagnosis/releases/tag/demo-v1) · `ai_diag_demo.mov` (download to play) |
 | Setup instructions | [Quick start](#quick-start-demo-about-10-minutes) · [Full reproduction](#full-reproduction-data--training) |
 | Architecture diagram | [Architecture](#architecture) · [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) |
 | API and data documentation | [`docs/API.md`](docs/API.md) · [`docs/DATA.md`](docs/DATA.md) |
 | Test results and accuracy | [Testing](#testing) · [Results](#results) · [`docs/MODEL_CARD.md`](docs/MODEL_CARD.md) |
-| Presentation and reflection | *added after the demo* |
+| Presentation and reflection | [`docs/presentation.pdf`](docs/presentation.pdf) · [`docs/REFLECTION.md`](docs/REFLECTION.md) |
 
 ## Screenshots
 
